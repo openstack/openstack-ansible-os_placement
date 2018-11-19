@@ -1,0 +1,127 @@
+# Copyright 2019, VEXXHOST, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Set installation method
+placement_install_method: "source"
+
+# Set the package install state for distribution and pip packages
+# Options are 'present' and 'latest'
+placement_package_state: "latest"
+placement_pip_package_state: "latest"
+
+# Set the host which will execute the shade modules
+# for the service setup. The host must already have
+# clouds.yaml properly configured.
+placement_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
+placement_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((placement_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
+
+placement_git_repo: https://git.openstack.org/openstack/placement
+placement_git_install_branch: master
+placement_developer_mode: false
+placement_developer_constraints:
+  - "git+{{ placement_git_repo }}@{{ placement_git_install_branch }}#egg=openstack-placement"
+
+
+# TODO(odyssey4me):
+# This can be simplified once all the roles are using
+# python_venv_build. We can then switch to using a
+# set of constraints in pip.conf inside the venv,
+# perhaps prepared by giving a giving a list of
+# constraints to the role.
+placement_pip_install_args: >-
+  {{ placement_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
+  {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''), '') }}
+  {{ pip_install_options | default('') }}
+
+# Name of the virtual env to deploy into
+placement_venv_tag: "{{ venv_tag | default('untagged') }}"
+placement_bin: "{{ _placement_bin }}"
+
+## Database info
+placement_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'][0], 'localhost') }}"
+placement_galera_address: "{{ galera_address | default('127.0.0.1') }}"
+placement_galera_database: placement
+placement_galera_user: placement
+placement_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
+placement_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
+
+## Placement User / Group
+placement_system_user_name: placement
+placement_system_group_name: placement
+placement_system_comment: placement system user
+placement_system_shell: /bin/false
+placement_system_user_home: "/var/lib/{{ placement_system_user_name }}"
+
+# API
+placement_bind_address: 0.0.0.0
+placement_service_port: 8780
+
+# UWSGI
+placement_wsgi_processes_max: 16
+placement_wsgi_processes: "{{ [[ansible_processor_vcpus|default(1), 1] | max * 2, placement_wsgi_processes_max] | min }}"
+placement_wsgi_threads: 1
+placement_wsgi_buffer_size: 65535
+
+## Service Type and Data
+placement_service_region: RegionOne
+placement_service_name: placement
+placement_service_proto: http
+placement_service_registry_proto: "{{ placement_service_proto }}"
+placement_service_publicuri_proto: "{{ openstack_service_publicuri_proto | default(placement_service_proto) }}"
+placement_service_adminuri_proto: "{{ openstack_service_adminuri_proto | default(placement_service_proto) }}"
+placement_service_internaluri_proto: "{{ openstack_service_internaluri_proto | default(placement_service_proto) }}"
+placement_service_type: placement
+placement_service_description: "Placement Service"
+placement_service_user_name: placement
+placement_service_project_name: service
+placement_service_project_domain_id: default
+placement_service_user_domain_id: default
+placement_service_publicurl: "{{ placement_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ placement_service_port }}"
+placement_service_internalurl: "{{ placement_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ placement_service_port }}"
+placement_service_adminurl: "{{ placement_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ placement_service_port }}"
+placement_service_in_ldap: false
+
+placement_auth_strategy: keystone
+
+## Keystone authentication middleware
+placement_keystone_auth_type: password
+placement_role_name: admin
+
+# Common pip packages
+placement_pip_packages:
+  - openstack-placement
+  - PyMySQL
+  - python-memcached
+  - cryptography
+  - uwsgi
+
+## Service Name-Group Mapping
+placement_services:
+  placement-api:
+    group: placement_api
+    service_name: placement-api
+    init_config_overrides: "{{ placement_api_init_overrides }}"
+    start_order: 1
+    wsgi_overrides: "{{ placement_api_uwsgi_ini_overrides }}"
+    wsgi_app: True
+    wsgi_name: placement-api
+    uwsgi_bind_address: "{{ placement_bind_address }}"
+    uwsgi_port: "{{ placement_service_port }}"
+    execstarts: "{{ placement_uwsgi_bin }}/uwsgi --autoload --ini /etc/uwsgi/placement-api.ini"
+    execreloads: "{{ placement_uwsgi_bin }}/uwsgi --reload /var/run/placement-api/placement-uwsgi.pid"
+
+## Tunable overrides
+placement_api_uwsgi_ini_overrides: {}
+placement_api_init_overrides: {}
+placement_placement_conf_overrides: {}

@@ -12,9 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# (c) 2017, Jean-Philippe Evrard <jean-philippe.evrard@rackspace.co.uk>
 
-maturity_info:
-  status: incubated
-  created_during: stein
+placement_distro_packages: []
+
+placement_service_distro_packages:
+  - openstack-placement-api
