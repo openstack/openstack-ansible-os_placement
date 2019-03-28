@@ -36,8 +36,22 @@
   retries: 5
   delay: 2
 
-- name: Install placement packages from PIP
-  include_tasks: placement_install_source.yml
+- name: Install the python venv
+  import_role:
+    name: "python_venv_build"
+  vars:
+    venv_build_constraints: "{{ placement_git_constraints }}"
+    venv_install_destination_path: "{{ placement_bin | dirname }}"
+    venv_install_distro_package_list: "{{ placement_distro_packages }}"
+    venv_pip_install_args: "{{ placement_pip_install_args }}"
+    venv_pip_packages: "{{ placement_pip_packages }}"
+    venv_facts_when_changed:
+      - section: "placement"
+        option: "need_service_restart"
+        value: True
+      - section: "placement"
+        option: "venv_tag"
+        value: "{{ placement_venv_tag }}"
   when: placement_install_method == 'source'
 
 - name: Record the need for a service restart

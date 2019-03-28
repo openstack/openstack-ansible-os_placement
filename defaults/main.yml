@@ -28,21 +28,12 @@ placement_service_setup_host_python_interpreter: "{{ openstack_service_setup_hos
 
 placement_git_repo: https://git.openstack.org/openstack/placement
 placement_git_install_branch: master
-placement_developer_mode: false
-placement_developer_constraints:
+placement_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
+placement_git_constraints:
   - "git+{{ placement_git_repo }}@{{ placement_git_install_branch }}#egg=openstack-placement"
+  - "--constraint {{ placement_upper_constraints_url }}"
 
-
-# TODO(odyssey4me):
-# This can be simplified once all the roles are using
-# python_venv_build. We can then switch to using a
-# set of constraints in pip.conf inside the venv,
-# perhaps prepared by giving a giving a list of
-# constraints to the role.
-placement_pip_install_args: >-
-  {{ placement_developer_mode | ternary(pip_install_developer_constraints | default('--constraint /opt/developer-pip-constraints.txt'), '') }}
-  {{ (pip_install_upper_constraints is defined) | ternary('--constraint ' + pip_install_upper_constraints | default(''), '') }}
-  {{ pip_install_options | default('') }}
+placement_pip_install_args: "{{ pip_install_options | default('') }}"
 
 # Name of the virtual env to deploy into
 placement_venv_tag: "{{ venv_tag | default('untagged') }}"
