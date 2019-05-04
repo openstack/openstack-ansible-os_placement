@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-placement_distro_packages: []
+placement_distro_packages:
+  - libxml2
 
 placement_service_distro_packages: []

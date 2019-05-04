@@ -18,6 +18,7 @@
 cache_timeout: 600
 
 # Common apt packages
-placement_distro_packages: []
+placement_distro_packages:
+  - libxml2
 
 placement_service_distro_packages: []
