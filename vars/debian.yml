@@ -21,4 +21,10 @@ cache_timeout: 600
 placement_distro_packages:
   - libxml2
 
-placement_service_distro_packages: []
+placement_service_distro_packages:
+  - python3-placement
+  - python3-pymysql
+  - uwsgi
+  - uwsgi-plugin-python3
+
+placement_uwsgi_bin: '/usr/bin'

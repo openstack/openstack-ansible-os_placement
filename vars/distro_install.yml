@@ -18,4 +18,3 @@ placement_package_list: |-
   {{ packages }}
 
 _placement_bin: "/usr/bin"
-placement_uwsgi_bin: '/usr/sbin'

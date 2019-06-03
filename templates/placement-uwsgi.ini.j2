@@ -6,6 +6,9 @@ gid = {{ placement_system_group_name }}
 {% if placement_install_method == 'source' %}
 virtualenv = /openstack/venvs/placement-{{ placement_venv_tag }}
 {% endif %}
+{% if placement_install_method == 'distro' and (ansible_os_family | lower) == 'debian' %}
+plugin = python3
+{% endif %}
 wsgi-file = {{ placement_bin }}/{{ item.wsgi_name }}
 http = {{ item.uwsgi_bind_address }}:{{ item.uwsgi_port }}
 
