@@ -40,6 +40,21 @@
   tags:
     - always
 
+- import_tasks: db_setup.yml
+  when:
+    - "placement_services['placement-api']['group'] in group_names"
+    - "inventory_hostname == ((groups[placement_services['placement-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
+  vars:
+    _oslodb_setup_host: "{{ placement_db_setup_host }}"
+    _oslodb_databases:
+      - name: "{{ placement_galera_database }}"
+        users:
+          - username: "{{ placement_galera_user }}"
+            password: "{{ placement_galera_password }}"
+  tags:
+    - common-db
+    - placement-config
+
 - include_tasks: placement_pre_install.yml
   tags:
     - placement-install
@@ -52,9 +67,10 @@
   tags:
     - placement-config
 
-- include_tasks: placement_db_setup.yml
+- include_tasks: placement_db_sync.yml
   run_once: true
   tags:
+    - common-db
     - placement-config
 
 - include_tasks: placement_service_setup.yml
