@@ -16,6 +16,7 @@
 placement_distro_packages:
   - libxml2
 
-placement_service_distro_packages: []
+placement_service_distro_packages:
+  - openstack-placement-api
 
 placement_uwsgi_bin: '/usr/sbin'
