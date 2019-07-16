@@ -95,6 +95,7 @@ placement_pip_packages:
   - PyMySQL
   - python-memcached
   - cryptography
+  - systemd-python
   - uwsgi
 
 ## Service Name-Group Mapping

@@ -41,6 +41,7 @@
     name: "python_venv_build"
   vars:
     venv_build_constraints: "{{ placement_git_constraints }}"
+    venv_build_distro_package_list: "{{ placement_devel_distro_packages }}"
     venv_install_destination_path: "{{ placement_bin | dirname }}"
     venv_install_distro_package_list: "{{ placement_distro_packages }}"
     venv_pip_install_args: "{{ placement_pip_install_args }}"

@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 [DEFAULT]
-log_dir = /var/log/placement
+use_journal = True
 
 [keystone_authtoken]
 auth_type = {{ placement_keystone_auth_type }}
