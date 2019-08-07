@@ -55,25 +55,25 @@
     - common-db
     - placement-config
 
-- include_tasks: placement_pre_install.yml
+- import_tasks: placement_pre_install.yml
   tags:
     - placement-install
 
-- include_tasks: placement_install.yml
+- import_tasks: placement_install.yml
   tags:
     - placement-install
 
-- include_tasks: placement_post_install.yml
+- import_tasks: placement_post_install.yml
   tags:
     - placement-config
 
-- include_tasks: placement_db_sync.yml
+- import_tasks: placement_db_sync.yml
   run_once: true
   tags:
     - common-db
     - placement-config
 
-- include_tasks: placement_service_setup.yml
+- import_tasks: placement_service_setup.yml
   run_once: true
   tags:
     - placement-config
