@@ -18,4 +18,3 @@ placement_package_list: |-
   {{ packages }}
 
 _placement_bin: "/openstack/venvs/placement-{{ placement_venv_tag }}/bin"
-placement_uwsgi_bin: "{{ _placement_bin }}"

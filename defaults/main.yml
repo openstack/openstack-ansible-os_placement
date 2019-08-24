@@ -62,7 +62,6 @@ placement_service_port: 8780
 placement_wsgi_processes_max: 16
 placement_wsgi_processes: "{{ [[ansible_processor_vcpus|default(1), 1] | max * 2, placement_wsgi_processes_max] | min }}"
 placement_wsgi_threads: 1
-placement_wsgi_buffer_size: 65535
 
 ## Service Type and Data
 placement_service_region: RegionOne
@@ -96,7 +95,6 @@ placement_pip_packages:
   - python-memcached
   - cryptography
   - systemd-python
-  - uwsgi
 
 ## Service Name-Group Mapping
 placement_services:
@@ -105,13 +103,11 @@ placement_services:
     service_name: placement-api
     init_config_overrides: "{{ placement_api_init_overrides }}"
     start_order: 1
-    wsgi_overrides: "{{ placement_api_uwsgi_ini_overrides }}"
     wsgi_app: True
     wsgi_name: placement-api
+    uwsgi_overrides: "{{ placement_api_uwsgi_ini_overrides }}"
     uwsgi_bind_address: "{{ placement_bind_address }}"
     uwsgi_port: "{{ placement_service_port }}"
-    execstarts: "{{ placement_uwsgi_bin }}/uwsgi --autoload --ini /etc/uwsgi/placement-api.ini"
-    execreloads: "{{ placement_uwsgi_bin }}/uwsgi --reload /var/run/placement-api/placement-uwsgi.pid"
 
 ## Tunable overrides
 placement_api_uwsgi_ini_overrides: {}

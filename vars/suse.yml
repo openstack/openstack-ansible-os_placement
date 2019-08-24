@@ -22,5 +22,3 @@ placement_devel_distro_packages:
 placement_service_distro_packages:
   - openstack-placement-api
   - python-systemd
-
-placement_uwsgi_bin: '/usr/sbin'

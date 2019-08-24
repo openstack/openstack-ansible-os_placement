@@ -28,7 +28,3 @@ placement_service_distro_packages:
   - python3-placement
   - python3-pymysql
   - python3-systemd
-  - uwsgi
-  - uwsgi-plugin-python3
-
-placement_uwsgi_bin: '/usr/bin'
