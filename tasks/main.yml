@@ -73,7 +73,32 @@
     - common-db
     - placement-config
 
-- import_tasks: placement_service_setup.yml
+- import_tasks: service_setup.yml
+  vars:
+    _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
+    _service_in_ldap: "{{ placement_service_in_ldap }}"
+    _service_setup_host: "{{ placement_service_setup_host }}"
+    _service_setup_host_python_interpreter: "{{ placement_service_setup_host_python_interpreter }}"
+    _service_project_name: "{{ placement_service_project_name }}"
+    _service_region: "{{ placement_service_region }}"
+    _service_users:
+      - name: "{{ placement_service_user_name }}"
+        password: "{{ placement_service_password }}"
+        role: "{{ placement_role_name }}"
+    _service_endpoints:
+      - service: "{{ placement_service_name }}"
+        interface: "public"
+        url: "{{ placement_service_publicurl }}"
+      - service: "{{ placement_service_name }}"
+        interface: "internal"
+        url: "{{ placement_service_internalurl }}"
+      - service: "{{ placement_service_name }}"
+        interface: "admin"
+        url: "{{ placement_service_adminurl }}"
+    _service_catalog:
+      - name: "{{ placement_service_name }}"
+        type: "{{ placement_service_type }}"
+        description: "{{ placement_service_description }}"
   run_once: true
   tags:
     - placement-config
