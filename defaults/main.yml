@@ -56,7 +56,7 @@ placement_system_shell: /bin/false
 placement_system_user_home: "/var/lib/{{ placement_system_user_name }}"
 
 # API
-placement_bind_address: 0.0.0.0
+placement_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 placement_service_port: 8780
 
 # UWSGI
