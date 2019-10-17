@@ -13,6 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- block:
+  - name: Get mysql-migrate-db.sh path
+    command: "{{ placement_bin }}/python -c \"import pkg_resources;print(pkg_resources.resource_filename('placement_db_tools', 'mysql-migrate-db.sh'))\" "
+    become: yes
+    become_user: "{{ placement_system_user_name }}"
+    changed_when: false
+    register: placement_db_tools
+  # NOTE(noonededpunk) We have rc 3 when data is already migrated and rc 4 when no data for migration
+  - name: Perform DB migration from nova-placement
+    command: "{{ placement_db_tools.stdout }} --migrate /etc/placement/placement-migrate-db.rc"
+    become: yes
+    become_user: "{{ placement_system_user_name }}"
+    register: placement_migrate
+    changed_when: placement_migrate.rc == 0
+    failed_when: placement_migrate.rc == 1 or placement_migrate.rc == 2 or placement_migrate.rc >= 5
+  when: placement_migrate_flag | default(False)
+
 - name: Perform a Placement DB sync
   command: "{{ placement_bin }}/placement-manage db sync"
   become: yes
