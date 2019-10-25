@@ -23,6 +23,8 @@
   # NOTE(noonededpunk) We have rc 3 when data is already migrated and rc 4 when no data for migration
   - name: Perform DB migration from nova-placement
     command: "{{ placement_db_tools.stdout }} --migrate /etc/placement/placement-migrate-db.rc"
+    environment:
+      PATH: "{{ placement_bin }}:{{ ansible_env.PATH }}"
     become: yes
     become_user: "{{ placement_system_user_name }}"
     register: placement_migrate
