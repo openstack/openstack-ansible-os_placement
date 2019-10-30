@@ -70,7 +70,6 @@
 - import_tasks: placement_db_sync.yml
   run_once: true
   tags:
-    - common-db
     - placement-config
 
 - name: Import uwsgi role
