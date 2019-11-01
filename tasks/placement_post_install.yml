@@ -27,12 +27,3 @@
       dest: "/etc/placement/placement.conf"
       config_overrides: "{{ placement_placement_conf_overrides }}"
       config_type: "ini"
-
-- name: Copy placement database migration config
-  template:
-    src: placement-migrate-db.rc.j2
-    dest: /etc/placement/placement-migrate-db.rc
-    owner: "root"
-    group: "{{ item.group|default(placement_system_group_name) }}"
-    mode: "0640"
-  when: placement_migrate_flag | default(False)
