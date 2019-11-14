@@ -27,9 +27,9 @@ placement_pip_package_state: "latest"
 placement_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
 placement_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((placement_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
 
-placement_git_repo: https://git.openstack.org/openstack/placement
+placement_git_repo: https://opendev.org/openstack/placement
 placement_git_install_branch: master
-placement_upper_constraints_url: "{{ requirements_git_url | default('https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt?h=' ~ requirements_git_install_branch | default('master')) }}"
+placement_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 placement_git_constraints:
   - "git+{{ placement_git_repo }}@{{ placement_git_install_branch }}#egg=openstack-placement"
   - "--constraint {{ placement_upper_constraints_url }}"
