@@ -93,9 +93,13 @@ placement_role_name: admin
 placement_pip_packages:
   - openstack-placement
   - PyMySQL
+  - pymemcache
   - python-memcached
   - cryptography
   - systemd-python
+
+# Memcached override
+placement_memcached_servers: "{{ memcached_servers }}"
 
 ## Service Name-Group Mapping
 placement_services:
