@@ -41,5 +41,3 @@
         that:
           - placement_request.status == 200
           - placement_request.json.resource_providers == []
-  vars:
-    ansible_python_interpreter: "{{ ansible_playbook_python }}"
