@@ -41,12 +41,14 @@ placement_venv_tag: "{{ venv_tag | default('untagged') }}"
 placement_bin: "{{ _placement_bin }}"
 
 ## Database info
-placement_db_setup_host: "{{ ('galera_all' in groups) | ternary(groups['galera_all'][0], 'localhost') }}"
+placement_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
+placement_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((placement_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
 placement_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 placement_galera_database: placement
 placement_galera_user: placement
 placement_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
 placement_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
+placement_galera_port: 3306
 
 ## Placement User / Group
 placement_system_user_name: placement
