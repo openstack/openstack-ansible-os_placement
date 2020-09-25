@@ -42,8 +42,7 @@
 
 - import_tasks: db_setup.yml
   when:
-    - "placement_services['placement-api']['group'] in group_names"
-    - "inventory_hostname == ((groups[placement_services['placement-api']['group']]| intersect(ansible_play_hosts)) | list)[0]"
+    - _placement_is_first_play_host
   vars:
     _oslodb_setup_host: "{{ placement_db_setup_host }}"
     _oslodb_ansible_python_interpreter: "{{ placement_db_setup_python_interpreter }}"
@@ -71,7 +70,7 @@
     - placement-config
 
 - import_tasks: placement_db_sync.yml
-  run_once: true
+  when: _placement_is_first_play_host
   tags:
     - placement-config
 
@@ -111,7 +110,7 @@
       - name: "{{ placement_service_name }}"
         type: "{{ placement_service_type }}"
         description: "{{ placement_service_description }}"
-  run_once: true
+  when: _placement_is_first_play_host
   tags:
     - placement-config
 
