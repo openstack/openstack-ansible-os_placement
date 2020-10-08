@@ -27,3 +27,6 @@
       dest: "/etc/placement/placement.conf"
       config_overrides: "{{ placement_placement_conf_overrides }}"
       config_type: "ini"
+  notify:
+    - Restart placement services
+    - Restart uwsgi services
