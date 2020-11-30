@@ -63,7 +63,7 @@ placement_service_port: 8780
 
 # UWSGI
 placement_wsgi_processes_max: 16
-placement_wsgi_processes: "{{ [[ansible_processor_vcpus|default(1), 1] | max * 2, placement_wsgi_processes_max] | min }}"
+placement_wsgi_processes: "{{ [[(ansible_processor_vcpus//ansible_processor_threads_per_core)|default(1), 1] | max * 2, placement_wsgi_processes_max] | min }}"
 placement_wsgi_threads: 1
 
 ## Service Type and Data
