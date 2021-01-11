@@ -13,13 +13,12 @@
 # limitations under the License.
 
 # Set installation method
-placement_install_method: "source"
+placement_install_method: "{{ service_install_method | default('source') }}"
 placement_venv_python_executable: "{{ openstack_venv_python_executable | default('python2') }}"
 
-# Set the package install state for distribution and pip packages
+# Set the package install state for distribution packages
 # Options are 'present' and 'latest'
-placement_package_state: "latest"
-placement_pip_package_state: "latest"
+placement_package_state: "{{ package_state | default('latest') }}"
 
 # Set the host which will execute the shade modules
 # for the service setup. The host must already have
@@ -48,7 +47,7 @@ placement_galera_database: placement
 placement_galera_user: placement
 placement_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
 placement_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
-placement_galera_port: 3306
+placement_galera_port: "{{ galera_port | default('3306') }}"
 
 ## Placement User / Group
 placement_system_user_name: placement
@@ -67,7 +66,7 @@ placement_wsgi_processes: "{{ [[(ansible_processor_vcpus//ansible_processor_thre
 placement_wsgi_threads: 1
 
 ## Service Type and Data
-placement_service_region: RegionOne
+placement_service_region: "{{ service_region | default('RegionOne') }}"
 placement_service_name: placement
 placement_service_proto: http
 placement_service_registry_proto: "{{ placement_service_proto }}"
@@ -83,7 +82,7 @@ placement_service_user_domain_id: default
 placement_service_publicurl: "{{ placement_service_publicuri_proto }}://{{ external_lb_vip_address }}:{{ placement_service_port }}"
 placement_service_internalurl: "{{ placement_service_internaluri_proto }}://{{ internal_lb_vip_address }}:{{ placement_service_port }}"
 placement_service_adminurl: "{{ placement_service_adminuri_proto }}://{{ internal_lb_vip_address }}:{{ placement_service_port }}"
-placement_service_in_ldap: false
+placement_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
 placement_auth_strategy: keystone
 
