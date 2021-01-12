@@ -30,7 +30,6 @@ placement_git_repo: https://opendev.org/openstack/placement
 placement_git_install_branch: master
 placement_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 placement_git_constraints:
-  - "git+{{ placement_git_repo }}@{{ placement_git_install_branch }}#egg=openstack-placement"
   - "--constraint {{ placement_upper_constraints_url }}"
 
 placement_pip_install_args: "{{ pip_install_options | default('') }}"
@@ -92,7 +91,7 @@ placement_role_name: admin
 
 # Common pip packages
 placement_pip_packages:
-  - openstack-placement
+  - "git+{{ placement_git_repo }}@{{ placement_git_install_branch }}#egg=openstack-placement"
   - PyMySQL
   - pymemcache
   - python-memcached
