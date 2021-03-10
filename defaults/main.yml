@@ -14,7 +14,7 @@
 
 # Set installation method
 placement_install_method: "{{ service_install_method | default('source') }}"
-placement_venv_python_executable: "{{ openstack_venv_python_executable | default('python2') }}"
+placement_venv_python_executable: "{{ openstack_venv_python_executable | default('python3') }}"
 
 # Set the package install state for distribution packages
 # Options are 'present' and 'latest'
