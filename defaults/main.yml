@@ -118,3 +118,4 @@ placement_services:
 placement_api_uwsgi_ini_overrides: {}
 placement_api_init_overrides: {}
 placement_placement_conf_overrides: {}
+placement_policy_overrides: {}

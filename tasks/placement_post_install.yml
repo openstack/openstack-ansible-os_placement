@@ -30,3 +30,22 @@
   notify:
     - Restart placement services
     - Restart uwsgi services
+
+- name: Implement policy.yaml if there are overrides configured
+  config_template:
+    content: "{{ placement_policy_overrides }}"
+    dest: "/etc/placement/policy.yaml"
+    config_type: yaml
+  when:
+    - placement_policy_overrides | length > 0
+  tags:
+    - placement-policy-override
+
+- name: Remove legacy policy.yaml file
+  file:
+    path: "/etc/placement/policy.yaml"
+    state: absent
+  when:
+    - placement_policy_overrides | length == 0
+  tags:
+    - placement-policy-override
