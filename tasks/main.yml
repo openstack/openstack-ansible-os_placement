@@ -85,7 +85,7 @@
     uwsgi_services: "{{ uwsgi_placement_services }}"
     uwsgi_install_method: "{{ placement_install_method }}"
   tags:
-    - cinder-config
+    - placement-config
     - uwsgi
 
 - import_tasks: service_setup.yml
