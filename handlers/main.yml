@@ -43,7 +43,3 @@
   listen:
     - "Restart placement services"
     - "venv changed"
-
-- meta: noop
-  listen: Manage LB
-  when: false
