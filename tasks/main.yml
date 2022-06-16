@@ -108,7 +108,7 @@
     _service_users:
       - name: "{{ placement_service_user_name }}"
         password: "{{ placement_service_password }}"
-        role: "{{ placement_role_name }}"
+        role: "{{ placement_service_role_names }}"
     _service_endpoints:
       - service: "{{ placement_service_name }}"
         interface: "public"
