@@ -14,6 +14,7 @@
 # limitations under the License.
 
 placement_distro_packages:
+  - git-core
   - libxml2
 
 placement_devel_distro_packages:
