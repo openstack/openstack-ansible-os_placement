@@ -72,6 +72,26 @@
   tags:
     - placement-install
 
+- name: Create and install SSL certificates
+  include_role:
+    name: pki
+    tasks_from: main_certs.yml
+    apply:
+      tags:
+        - placement-config
+        - pki
+  vars:
+    pki_setup_host: "{{ placement_pki_setup_host }}"
+    pki_dir: "{{ placement_pki_dir }}"
+    pki_create_certificates: "{{ placement_user_ssl_cert is not defined and placement_user_ssl_key is not defined }}"
+    pki_regen_cert: "{{ placement_pki_regen_cert }}"
+    pki_certificates: "{{ placement_pki_certificates }}"
+    pki_install_certificates: "{{ placement_pki_install_certificates }}"
+  when:
+    - placement_backend_ssl
+  tags:
+    - always
+
 - import_tasks: placement_post_install.yml
   tags:
     - placement-config

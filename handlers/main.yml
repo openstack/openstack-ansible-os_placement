@@ -29,6 +29,7 @@
     - "Restart placement services"
     - "venv changed"
     - "systemd service changed"
+    - "cert installed"
 
 - name: Start services
   service:
@@ -45,3 +46,4 @@
     - "Restart placement services"
     - "venv changed"
     - "systemd service changed"
+    - "cert installed"

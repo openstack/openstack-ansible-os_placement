@@ -67,6 +67,9 @@ placement_service_port: 8780
 placement_wsgi_processes_max: 16
 placement_wsgi_processes: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, placement_wsgi_processes_max] | min }}"
 placement_wsgi_threads: 1
+placement_uwsgi_tls:
+  crt: "{{ placement_ssl_cert }}"
+  key: "{{ placement_ssl_key }}"
 
 ## Service Type and Data
 placement_service_region: "{{ service_region | default('RegionOne') }}"
@@ -127,9 +130,58 @@ placement_services:
     uwsgi_overrides: "{{ placement_api_uwsgi_ini_overrides }}"
     uwsgi_bind_address: "{{ placement_bind_address }}"
     uwsgi_port: "{{ placement_service_port }}"
+    uwsgi_tls: "{{ placement_backend_ssl | ternary(placement_uwsgi_tls, {}) }}"
 
 ## Tunable overrides
 placement_api_uwsgi_ini_overrides: {}
 placement_api_init_overrides: {}
 placement_placement_conf_overrides: {}
 placement_policy_overrides: {}
+
+###
+### Backend TLS
+###
+
+# Define if communication between haproxy and service backends should be
+# encrypted with TLS.
+placement_backend_ssl: "{{ openstack_service_backend_ssl | default(False) }}"
+
+# Storage location for SSL certificate authority
+placement_pki_dir: "{{ openstack_pki_dir | default('/etc/openstack_deploy/pki') }}"
+
+# Delegated host for operating the certificate authority
+placement_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}"
+
+# placement server certificate
+placement_pki_keys_path: "{{ placement_pki_dir ~ '/certs/private/' }}"
+placement_pki_certs_path: "{{ placement_pki_dir ~ '/certs/certs/' }}"
+placement_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
+placement_pki_regen_cert: ''
+placement_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+placement_pki_certificates:
+  - name: "placement_{{ ansible_facts['hostname'] }}"
+    provider: ownca
+    cn: "{{ ansible_facts['hostname'] }}"
+    san: "{{ placement_pki_san }}"
+    signed_by: "{{ placement_pki_intermediate_cert_name }}"
+
+# placement destination files for SSL certificates
+placement_ssl_cert: /etc/placement/placement.pem
+placement_ssl_key: /etc/placement/placement.key
+
+# Installation details for SSL certificates
+placement_pki_install_certificates:
+  - src: "{{ placement_user_ssl_cert | default(placement_pki_certs_path ~ 'placement_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+    dest: "{{ placement_ssl_cert }}"
+    owner: "{{ placement_system_user_name }}"
+    group: "{{ placement_system_user_name }}"
+    mode: "0644"
+  - src: "{{ placement_user_ssl_key | default(placement_pki_keys_path ~ 'placement_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    dest: "{{ placement_ssl_key }}"
+    owner: "{{ placement_system_user_name }}"
+    group: "{{ placement_system_user_name }}"
+    mode: "0600"
+
+# Define user-provided SSL certificates
+#placement_user_ssl_cert: <path to cert on ansible deployment host>
+#placement_user_ssl_key: <path to cert on ansible deployment host>
