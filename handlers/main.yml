@@ -28,6 +28,7 @@
   listen:
     - "Restart placement services"
     - "venv changed"
+    - "systemd service changed"
 
 - name: Start services
   service:
@@ -43,3 +44,4 @@
   listen:
     - "Restart placement services"
     - "venv changed"
+    - "systemd service changed"
