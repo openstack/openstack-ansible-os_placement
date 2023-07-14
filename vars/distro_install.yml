@@ -14,7 +14,7 @@
 # limitations under the License.
 
 placement_package_list: |-
-  {% set packages = (placement_distro_packages + placement_service_distro_packages) %}
+  {% set packages = placement_distro_packages + placement_service_distro_packages %}
   {{ packages }}
 
 _placement_bin: "/usr/bin"

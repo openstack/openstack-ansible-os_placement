@@ -43,7 +43,8 @@
   tags:
     - always
 
-- include_role:
+- name: Including osa.db_setup role
+  include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -64,11 +65,13 @@
   tags:
     - always
 
-- import_tasks: placement_pre_install.yml
+- name: Importing placement_pre_install tasks
+  import_tasks: placement_pre_install.yml
   tags:
     - placement-install
 
-- import_tasks: placement_install.yml
+- name: Importing placement_install tasks
+  import_tasks: placement_install.yml
   tags:
     - placement-install
 
@@ -92,11 +95,13 @@
   tags:
     - always
 
-- import_tasks: placement_post_install.yml
+- name: Importing placement_post_install tasks
+  import_tasks: placement_post_install.yml
   tags:
     - placement-config
 
-- import_tasks: placement_db_sync.yml
+- name: Importing placement_db_sync tasks
+  import_tasks: placement_db_sync.yml
   when: _placement_is_first_play_host
   tags:
     - placement-config
@@ -111,7 +116,8 @@
     - placement-config
     - uwsgi
 
-- include_role:
+- name: Including osa.service_setup role
+  include_role:
     name: openstack.osa.service_setup
     apply:
       tags:

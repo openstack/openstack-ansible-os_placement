@@ -13,17 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: create the system group
+- name: Create the system group
   group:
     name: "{{ placement_system_group_name }}"
-    gid: "{{ placement_system_group_gid|default(omit) }}"
+    gid: "{{ placement_system_group_gid | default(omit) }}"
     state: "present"
     system: "yes"
 
 - name: Create the placement system user
   user:
     name: "{{ placement_system_user_name }}"
-    uid: "{{ placement_system_user_uid|default(omit) }}"
+    uid: "{{ placement_system_user_uid | default(omit) }}"
     group: "{{ placement_system_group_name }}"
     comment: "{{ placement_system_comment }}"
     shell: "{{ placement_system_shell }}"
@@ -35,9 +35,9 @@
   file:
     path: "{{ item.path }}"
     state: directory
-    owner: "{{ item.owner|default(placement_system_user_name) }}"
-    group: "{{ item.group|default(placement_system_group_name) }}"
-    mode: "{{ item.mode|default('0755') }}"
+    owner: "{{ item.owner | default(placement_system_user_name) }}"
+    group: "{{ item.group | default(placement_system_group_name) }}"
+    mode: "{{ item.mode | default('0755') }}"
   with_items:
     - path: "/openstack"
       mode: "0755"

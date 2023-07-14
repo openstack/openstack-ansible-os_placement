@@ -18,7 +18,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: "root"
-    group: "{{ item.group|default(placement_system_group_name) }}"
+    group: "{{ item.group | default(placement_system_group_name) }}"
     mode: "0640"
     config_overrides: "{{ item.config_overrides }}"
     config_type: "{{ item.config_type }}"
