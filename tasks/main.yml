@@ -154,3 +154,14 @@
 
 - name: Flush handlers
   meta: flush_handlers
+
+- name: Including placement_db_post_setup tasks
+  include_tasks: placement_db_post_setup.yml
+  args:
+    apply:
+      tags:
+        - placement-config
+  when:
+    - "_placement_is_last_play_host"
+  tags:
+    - placement-config

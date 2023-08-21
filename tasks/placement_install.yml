@@ -50,7 +50,7 @@
     venv_pip_packages: "{{ placement_pip_packages }}"
     venv_facts_when_changed:
       - section: "placement"
-        option: "need_service_restart"
+        option: "need_online_data_migrations"
         value: True
       - section: "placement"
         option: "venv_tag"
@@ -61,11 +61,11 @@
   ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: "placement"
-    option: "need_service_restart"
+    option: "need_online_data_migrations"
     value: true
     mode: "0644"
   when: (install_packages is changed) or
-        ('need_service_restart' not in ansible_local['openstack_ansible']['placement'])
+        ('need_online_data_migrations' not in ansible_local['openstack_ansible']['placement'])
 
 - name: Run the systemd service role
   include_role:

@@ -15,9 +15,15 @@
 
 _placement_is_first_play_host: >-
   {{
-    (placement_services['placement-api']['group'] in group_names and
-      inventory_hostname == (groups[placement_services['placement-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
+    (placement_services['placement-api']['group'] in group_names and inventory_hostname == (
+      groups[placement_services['placement-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
   }}
+_placement_is_last_play_host: >-
+  {{
+    (placement_services['placement-api']['group'] in group_names and inventory_hostname == (
+      groups[placement_services['placement-api']['group']] | intersect(ansible_play_hosts)) | last) | bool
+  }}
+
 
 # Compile a list of the services on a host based on whether
 # the host is in the host group and the service is enabled.
