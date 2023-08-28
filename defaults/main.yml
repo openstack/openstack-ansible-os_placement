@@ -24,11 +24,16 @@ placement_package_state: "{{ package_state | default('latest') }}"
 # for the service setup. The host must already have
 # clouds.yaml properly configured.
 placement_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
-placement_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((placement_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
+placement_service_setup_host_python_interpreter: >-
+  {{
+    openstack_service_setup_host_python_interpreter | default(
+      (placement_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable']))
+  }}
 
 placement_git_repo: https://opendev.org/openstack/placement
 placement_git_install_branch: master
-placement_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
+placement_upper_constraints_url: >-
+  {{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}
 placement_git_constraints:
   - "--constraint {{ placement_upper_constraints_url }}"
 
@@ -40,7 +45,11 @@ placement_bin: "{{ _placement_bin }}"
 
 ## Database info
 placement_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
-placement_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((placement_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
+placement_db_setup_python_interpreter: >-
+  {{
+    openstack_db_setup_python_interpreter | default(
+      (placement_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable']))
+  }}
 placement_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 placement_galera_database: placement
 placement_galera_user: placement
@@ -65,7 +74,8 @@ placement_service_port: 8780
 
 # UWSGI
 placement_wsgi_processes_max: 16
-placement_wsgi_processes: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, placement_wsgi_processes_max] | min }}"
+placement_wsgi_processes: >-
+  {{ [[(ansible_facts['processor_vcpus'] // ansible_facts['processor_threads_per_core']) | default(1), 1] | max * 2, placement_wsgi_processes_max] | min }}
 placement_wsgi_threads: 1
 placement_uwsgi_tls:
   crt: "{{ placement_ssl_cert }}"
@@ -183,5 +193,5 @@ placement_pki_install_certificates:
     mode: "0600"
 
 # Define user-provided SSL certificates
-#placement_user_ssl_cert: <path to cert on ansible deployment host>
-#placement_user_ssl_key: <path to cert on ansible deployment host>
+# placement_user_ssl_cert: <path to cert on ansible deployment host>
+# placement_user_ssl_key: <path to cert on ansible deployment host>
