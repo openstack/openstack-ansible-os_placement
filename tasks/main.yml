@@ -99,6 +99,7 @@
   import_tasks: placement_post_install.yml
   tags:
     - placement-config
+    - post-install
 
 - name: Importing placement_db_sync tasks
   import_tasks: placement_db_sync.yml
