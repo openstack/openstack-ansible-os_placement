@@ -14,7 +14,7 @@
 # limitations under the License.
 
 - name: Record the installation method
-  ini_file:
+  community.general.ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: "placement"
     option: "install_method"
@@ -22,12 +22,12 @@
     mode: "0644"
 
 - name: Refresh local facts to ensure the placement section is present
-  setup:
+  ansible.builtin.setup:
     filter: ansible_local
     gather_subset: "!all"
 
 - name: Install distro packages
-  package:
+  ansible.builtin.package:
     name: "{{ placement_package_list }}"
     state: "{{ placement_package_state }}"
     update_cache: "{{ (ansible_facts['pkg_mgr'] == 'apt') | ternary('yes', omit) }}"
@@ -38,7 +38,7 @@
   delay: 2
 
 - name: Install the python venv
-  import_role:
+  ansible.builtin.import_role:
     name: "python_venv_build"
   vars:
     venv_python_executable: "{{ placement_venv_python_executable }}"
@@ -58,7 +58,7 @@
   when: placement_install_method == 'source'
 
 - name: Record the need for a service restart
-  ini_file:
+  community.general.ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: "placement"
     option: "need_online_data_migrations"
@@ -68,7 +68,7 @@
         ('need_online_data_migrations' not in ansible_local['openstack_ansible']['placement'])
 
 - name: Run the systemd service role
-  include_role:
+  ansible.builtin.include_role:
     name: systemd_service
   vars:
     systemd_user_name: "{{ placement_system_user_name }}"

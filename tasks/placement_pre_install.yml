@@ -14,14 +14,14 @@
 # limitations under the License.
 
 - name: Create the system group
-  group:
+  ansible.builtin.group:
     name: "{{ placement_system_group_name }}"
     gid: "{{ placement_system_group_gid | default(omit) }}"
     state: "present"
     system: "yes"
 
 - name: Create the placement system user
-  user:
+  ansible.builtin.user:
     name: "{{ placement_system_user_name }}"
     uid: "{{ placement_system_user_uid | default(omit) }}"
     group: "{{ placement_system_group_name }}"
@@ -32,7 +32,7 @@
     home: "{{ placement_system_user_home }}"
 
 - name: Create placement dir
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     owner: "{{ item.owner | default(placement_system_user_name) }}"

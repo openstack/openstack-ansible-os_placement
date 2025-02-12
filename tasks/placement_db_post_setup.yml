@@ -14,12 +14,12 @@
 # limitations under the License.
 
 - name: Refresh local facts
-  setup:
+  ansible.builtin.setup:
     filter: ansible_local
     gather_subset: "!all"
 
 - name: Perform a Placement DB online migrations
-  command: "{{ placement_bin }}/placement-manage db online_data_migrations"
+  ansible.builtin.command: "{{ placement_bin }}/placement-manage db online_data_migrations"
   become: true
   become_user: "{{ placement_system_user_name }}"
   changed_when: false
@@ -33,7 +33,7 @@
 
 - name: Disable the online migrations requirement
   delegate_to: "{{ item }}"
-  ini_file:
+  community.general.ini_file:
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: placement
     option: need_online_data_migrations
