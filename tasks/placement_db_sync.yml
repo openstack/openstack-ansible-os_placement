@@ -15,6 +15,6 @@
 
 - name: Perform a Placement DB sync
   command: "{{ placement_bin }}/placement-manage db sync"
-  become: yes
+  become: true
   become_user: "{{ placement_system_user_name }}"
   changed_when: false

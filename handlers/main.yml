@@ -12,14 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 - name: Stop services
   service:
     name: "{{ item.service_name }}"
-    enabled: yes
+    enabled: true
     state: "stopped"
-    daemon_reload: yes
+    daemon_reload: true
   with_items: "{{ filtered_placement_services }}"
   register: _stop
   until: _stop is success
@@ -34,9 +32,9 @@
 - name: Start services
   service:
     name: "{{ item.service_name }}"
-    enabled: yes
+    enabled: true
     state: "started"
-    daemon_reload: yes
+    daemon_reload: true
   with_items: "{{ filtered_placement_services }}"
   register: _start
   until: _start is success

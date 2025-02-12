@@ -37,7 +37,7 @@
     dest: "/etc/ansible/facts.d/openstack_ansible.fact"
     section: placement
     option: need_online_data_migrations
-    value: False
+    value: false
     mode: "0644"
   with_items: "{{ groups[placement_services['placement-api']['group']] }}"
   when:

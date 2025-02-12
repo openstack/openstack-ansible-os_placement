@@ -1,3 +1,4 @@
+---
 # Copyright 2019, VEXXHOST, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -135,7 +136,7 @@ placement_services:
     service_name: placement-api
     init_config_overrides: "{{ placement_api_init_overrides }}"
     start_order: 1
-    wsgi_app: True
+    wsgi_app: true
     wsgi_name: placement-api
     uwsgi_overrides: "{{ placement_api_uwsgi_ini_overrides }}"
     uwsgi_bind_address: "{{ placement_bind_address }}"
@@ -166,7 +167,7 @@ placement_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}
 placement_pki_keys_path: "{{ placement_pki_dir ~ '/certs/private/' }}"
 placement_pki_certs_path: "{{ placement_pki_dir ~ '/certs/certs/' }}"
 placement_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
-placement_pki_regen_cert: ''
+placement_pki_regen_cert: ""
 placement_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
 placement_pki_certificates:
   - name: "placement_{{ ansible_facts['hostname'] }}"
