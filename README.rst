@@ -1,17 +1,8 @@
-========================
-Team and repository tags
-========================
-
-.. image:: https://governance.openstack.org/tc/badges/openstack-ansible-os_placement.svg
-    :target: https://governance.openstack.org/tc/reference/tags/index.html
-
-.. Change things from this point on
-
 ===========================
 OpenStack-Ansible Placement
 ===========================
 
-This Ansible role installs and configures OpenStack placement
+This Ansible role installs and configures OpenStack Placement.
 
 Documentation for the project can be found at:
   https://docs.openstack.org/openstack-ansible-os_placement/latest/
