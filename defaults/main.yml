@@ -137,6 +137,7 @@ placement_services:
     init_config_overrides: "{{ placement_api_init_overrides }}"
     start_order: 1
     wsgi_app: true
+    wsgi: "placement.wsgi.api:application"
     wsgi_name: placement-api
     uwsgi_overrides: "{{ placement_api_uwsgi_ini_overrides }}"
     uwsgi_bind_address: "{{ placement_bind_address }}"
