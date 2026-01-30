@@ -51,7 +51,7 @@
         - common-db
         - placement-config
   when:
-    - _placement_is_first_play_host
+    - _placement_is_first_play_host | bool
   vars:
     _oslodb_setup_host: "{{ placement_db_setup_host }}"
     _oslodb_ansible_python_interpreter: "{{ placement_db_setup_python_interpreter }}"
@@ -91,7 +91,7 @@
     pki_certificates: "{{ placement_pki_certificates }}"
     pki_install_certificates: "{{ placement_pki_install_certificates }}"
   when:
-    - placement_backend_ssl
+    - placement_backend_ssl | bool
   tags:
     - always
 
@@ -103,7 +103,7 @@
 
 - name: Importing placement_db_sync tasks
   ansible.builtin.import_tasks: placement_db_sync.yml
-  when: _placement_is_first_play_host
+  when: _placement_is_first_play_host | bool
   tags:
     - placement-config
 
@@ -149,7 +149,7 @@
       - name: "{{ placement_service_name }}"
         type: "{{ placement_service_type }}"
         description: "{{ placement_service_description }}"
-  when: _placement_is_first_play_host
+  when: _placement_is_first_play_host | bool
   tags:
     - always
 
@@ -163,6 +163,6 @@
       tags:
         - placement-config
   when:
-    - "_placement_is_last_play_host"
+    - _placement_is_last_play_host | bool
   tags:
     - placement-config

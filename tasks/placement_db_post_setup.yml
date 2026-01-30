@@ -28,8 +28,8 @@
   until: "data_migrations.rc in [0, 2]"
   register: data_migrations
   when:
-    - "ansible_local['openstack_ansible']['placement']['need_online_data_migrations'] | bool"
-    - _placement_is_last_play_host
+    - ansible_local['openstack_ansible']['placement']['need_online_data_migrations'] | bool
+    - _placement_is_last_play_host | bool
 
 - name: Disable the online migrations requirement
   delegate_to: "{{ item }}"
