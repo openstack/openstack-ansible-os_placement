@@ -169,12 +169,15 @@ placement_pki_keys_path: "{{ placement_pki_dir ~ '/certs/private/' }}"
 placement_pki_certs_path: "{{ placement_pki_dir ~ '/certs/certs/' }}"
 placement_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
 placement_pki_regen_cert: ""
-placement_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+placement_pki_san: "{{ openstack_pki_san | default({'dns': [ansible_facts['hostname']], 'ip': [management_address]}) }}"
+placement_pki_backend: "{{ openstack_pki_backend | default('standalone') }}"
+
 placement_pki_certificates:
   - name: "placement_{{ ansible_facts['hostname'] }}"
-    provider: ownca
     cn: "{{ ansible_facts['hostname'] }}"
     san: "{{ placement_pki_san }}"
+    # standalone backend only
+    provider: ownca
     signed_by: "{{ placement_pki_intermediate_cert_name }}"
 
 # placement destination files for SSL certificates
@@ -183,17 +186,21 @@ placement_ssl_key: /etc/placement/placement.key
 
 # Installation details for SSL certificates
 placement_pki_install_certificates:
-  - src: "{{ placement_user_ssl_cert | default(placement_pki_certs_path ~ 'placement_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+  - name: "placement_{{ ansible_facts['hostname'] }}"
+    type: "certificate_chain"
     dest: "{{ placement_ssl_cert }}"
     owner: "{{ placement_system_user_name }}"
     group: "{{ placement_system_user_name }}"
-    mode: "0644"
-  - src: "{{ placement_user_ssl_key | default(placement_pki_keys_path ~ 'placement_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    # standalone backend only
+    src: "{{ placement_user_ssl_cert }}"
+  - name: "placement_{{ ansible_facts['hostname'] }}"
+    type: "private_key"
     dest: "{{ placement_ssl_key }}"
     owner: "{{ placement_system_user_name }}"
     group: "{{ placement_system_user_name }}"
-    mode: "0600"
+    # standalone backend only
+    src: "{{ placement_user_ssl_key }}"
 
 # Define user-provided SSL certificates
-# placement_user_ssl_cert: <path to cert on ansible deployment host>
-# placement_user_ssl_key: <path to cert on ansible deployment host>
+placement_user_ssl_cert: ""
+placement_user_ssl_key: ""
