@@ -119,7 +119,7 @@ placement_keystone_auth_type: password
 
 # Common pip packages
 placement_pip_packages:
-  - "git+{{ placement_git_repo }}@{{ placement_git_install_branch }}#egg=openstack-placement"
+  - "openstack-placement@git+{{ placement_git_repo }}@{{ placement_git_install_branch }}"
   - PyMySQL
   - pymemcache
   - python-memcached
